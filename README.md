@@ -1,5 +1,7 @@
 # Zentic (PS5-Style Steam Launcher)
 
+![ ](preview.png)
+
 Zentic is a beautiful, full-screen alternative launcher for your Steam library designed to mimic the modern console experience. It runs directly as a standalone Windows executable and is fully controllable via gamepads (DualShock, DualSense, Xbox).
 
 ## Features
