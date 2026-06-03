@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zentic</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="boot-screen" class="boot-screen">
+  <div class="boot-logo">
+    <svg viewBox="0 0 260 60" class="ps-logo-svg">
+      <text x="10" y="50" font-family="Arial Black" font-size="56" fill="white" font-weight="900">Z</text>
+      <rect x="55" y="18" width="2" height="30" fill="rgba(255,255,255,0.3)"/>
+      <text x="65" y="38" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.8)" font-weight="300" letter-spacing="4">ZENTIC</text>
+      <text x="65" y="52" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.4)" font-weight="300" letter-spacing="3">SYSTEM</text>
+    </svg>
+  </div>
+  <div class="boot-progress-wrap">
+    <div class="boot-progress">
+      <div class="boot-progress-bar" id="boot-bar"></div>
+    </div>
+  </div>
+  <div class="boot-status" id="boot-status">Initializing...</div>
+</div>
+<div id="launch-overlay" class="launch-overlay">
+  <div class="launch-bg" id="launch-bg"></div>
+  <div class="launch-gradient"></div>
+  <div class="launch-content">
+    <img class="launch-logo" id="launch-logo" src="" alt="">
+    <div class="ps5-loader"></div>
+  </div>
+</div>
+<div id="notification" class="notification hidden">
+  <div class="notification-icon" id="notif-icon">🎮</div>
+  <div class="notification-body">
+    <div class="notification-title" id="notification-title"></div>
+    <div class="notification-text"  id="notification-text"></div>
+  </div>
+</div>
+<div class="library-backdrop" id="library-backdrop"></div>
+<div class="library-panel" id="library-panel">
+  <div class="library-handle"><div class="library-handle-bar"></div></div>
+  <div class="library-header">
+    <span class="library-title">Your Library</span>
+    <span class="library-count" id="lib-count">0 games</span>
+    <span class="library-close-hint" id="lib-close-hint"></span>
+  </div>
+  <div class="library-scroll-wrap">
+    <button class="lib-arrow" id="lib-arrow-left">&#8249;</button>
+    <div class="library-scroll" id="library-scroll"></div>
+    <button class="lib-arrow" id="lib-arrow-right">&#8250;</button>
+  </div>
+</div>
+<div id="app" class="app invisible">
+  <header class="topbar">
+    <nav class="topbar-nav">
+      <button class="nav-tab active" data-tab="games">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM11 11H9v2H7v-2H5V9h2V7h2v2h2v2zm4 1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+        </svg>
+        Games
+      </button>
+      <button class="nav-tab" data-tab="media">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15l5-3.5L8 8v7z"/>
+        </svg>
+        Media
+      </button>
+    </nav>
+    <div class="topbar-actions">
+      <button class="action-btn top-item" id="btn-search" data-topidx="0" title="Search">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+      <button class="action-btn top-item" id="btn-settings" data-topidx="1" title="Settings">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+      <div class="user-profile top-item" id="btn-profile" data-topidx="2">
+        <div class="user-avatar" id="user-avatar">
+          <div class="avatar-circle">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </div>
+          <div class="online-dot"></div>
+        </div>
+        <span class="user-name" id="user-name">Loading...</span>
+      </div>
+      <div class="topbar-time" id="clock">12:00</div>
+    </div>
+  </header>
+  <div class="tab-content active" id="tab-content-games">
+    <div class="game-bar-wrapper">
+      <div class="game-bar" id="game-bar"></div>
+    </div>
+    <div class="hero-area" id="hero-area">
+      <div class="hero-bg" id="hero-bg"></div>
+      <div class="hero-gradient"></div>
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-logo" id="hero-logo"></div>
+          <h1 class="hero-title" id="hero-title">Select a Game</h1>
+          <div class="hero-meta" id="hero-meta"></div>
+          <div class="hero-actions">
+            <button class="btn-play" id="btn-play">
+              <div class="btn-play-runner" id="play-runner"></div>
+              <div class="btn-play-mask"></div>
+              <div class="btn-play-content">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+                Play
+              </div>
+            </button>
+            <button class="btn-secondary" id="btn-more">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+              </svg>
+              Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="tab-content-media">
+    <div class="media-view">
+      <div class="media-hero">
+        <div class="media-hero-text">
+          <h1>Media</h1>
+          <p>Your entertainment hub</p>
+        </div>
+      </div>
+      <div class="media-apps">
+        <div class="media-app-card" data-midx="0">
+          <div class="media-app-icon">📺</div><span>YouTube</span>
+        </div>
+        <div class="media-app-card" data-midx="1">
+          <div class="media-app-icon">🎵</div><span>Spotify</span>
+        </div>
+        <div class="media-app-card" data-midx="2">
+          <div class="media-app-icon">🎬</div><span>Netflix</span>
+        </div>
+        <div class="media-app-card" data-midx="3">
+          <div class="media-app-icon">🎭</div><span>Twitch</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="search-overlay hidden" id="search-overlay">
+    <div class="search-header">
+      <div class="search-input-wrap" id="search-input-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <div class="search-display">
+          <span class="search-display-text" id="search-display-text"></span>
+          <span class="search-cursor">|</span>
+        </div>
+        <button class="search-clear hidden" id="search-clear">✕</button>
+      </div>
+      <button class="search-close-btn" id="search-close">Cancel</button>
+    </div>
+    <div class="search-body">
+      <div class="search-results" id="search-results"></div>
+      <div class="osk" id="osk">
+        <div class="osk-row">
+          <button class="osk-key" data-char="1">1</button>
+          <button class="osk-key" data-char="2">2</button>
+          <button class="osk-key" data-char="3">3</button>
+          <button class="osk-key" data-char="4">4</button>
+          <button class="osk-key" data-char="5">5</button>
+          <button class="osk-key" data-char="6">6</button>
+          <button class="osk-key" data-char="7">7</button>
+          <button class="osk-key" data-char="8">8</button>
+          <button class="osk-key" data-char="9">9</button>
+          <button class="osk-key" data-char="0">0</button>
+          <button class="osk-key osk-action" data-action="backspace">⌫</button>
+        </div>
+        <div class="osk-row">
+          <button class="osk-key" data-char="q">Q</button>
+          <button class="osk-key" data-char="w">W</button>
+          <button class="osk-key" data-char="e">E</button>
+          <button class="osk-key" data-char="r">R</button>
+          <button class="osk-key" data-char="t">T</button>
+          <button class="osk-key" data-char="y">Y</button>
+          <button class="osk-key" data-char="u">U</button>
+          <button class="osk-key" data-char="i">I</button>
+          <button class="osk-key" data-char="o">O</button>
+          <button class="osk-key" data-char="p">P</button>
+          <button class="osk-key osk-action" data-action="clear">CLR</button>
+        </div>
+        <div class="osk-row">
+          <button class="osk-key" data-char="a">A</button>
+          <button class="osk-key" data-char="s">S</button>
+          <button class="osk-key" data-char="d">D</button>
+          <button class="osk-key" data-char="f">F</button>
+          <button class="osk-key" data-char="g">G</button>
+          <button class="osk-key" data-char="h">H</button>
+          <button class="osk-key" data-char="j">J</button>
+          <button class="osk-key" data-char="k">K</button>
+          <button class="osk-key" data-char="l">L</button>
+          <button class="osk-key osk-action osk-wide" data-action="space">SPACE</button>
+        </div>
+        <div class="osk-row">
+          <button class="osk-key" data-char="z">Z</button>
+          <button class="osk-key" data-char="x">X</button>
+          <button class="osk-key" data-char="c">C</button>
+          <button class="osk-key" data-char="v">V</button>
+          <button class="osk-key" data-char="b">B</button>
+          <button class="osk-key" data-char="n">N</button>
+          <button class="osk-key" data-char="m">M</button>
+          <button class="osk-key" data-char="-">-</button>
+          <button class="osk-key" data-char=":">:</button>
+          <button class="osk-key osk-action" data-action="results">🔍</button>
+          <button class="osk-key osk-action" data-action="close">✕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="detail-panel hidden" id="detail-panel">
+    <div class="detail-bg" id="detail-bg"></div>
+    <div class="detail-overlay"></div>
+    <button class="detail-close" id="detail-close">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6"  y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="detail-content">
+      <img class="detail-logo-img" id="detail-logo" src="" alt="">
+      <h2 class="detail-title" id="detail-title"></h2>
+      <div class="detail-stats" id="detail-stats"></div>
+      <div class="detail-actions">
+        <button class="btn-play" id="detail-play">
+          <div class="btn-play-runner"></div>
+          <div class="btn-play-mask"></div>
+          <div class="btn-play-content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            Play
+          </div>
+        </button>
+        <button class="btn-secondary" id="detail-store">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          Store
+        </button>
+      </div>
+    </div>
+  </div>
+<div class="side-panel hidden" id="settings-panel">
+  <div class="side-header">
+    Settings
+    <button class="side-close" id="settings-close">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6"  y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="side-group">
+    <div class="side-item" id="setting-hide-steam">
+      <span class="side-label">Hide Steam Windows</span>
+      <div class="toggle-switch" id="toggle-hide-steam"></div>
+    </div>
+    <div class="side-item" id="setting-ds3-fix">
+      <span class="side-label">Gamepad Layout</span>
+      <span class="side-value" id="ds3-fix-label" style="font-size:12px; font-weight:700; color:var(--blue);">Standard</span>
+    </div>
+  </div>
+</div>
+<div class="side-panel hidden" id="profile-panel">
+  <div class="side-header">
+    Profile
+    <button class="side-close" id="profile-close">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6"  y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="profile-content">
+    <div class="profile-avatar-large">
+      <img id="profile-avatar-img" src="" alt="" style="width:100%; height:100%; object-fit:cover; display:none;">
+    </div>
+    <h2 class="profile-name-large" id="profile-name-large">Loading...</h2>
+    <div class="profile-id-text" id="profile-id-text">Account ID: —</div>
+  </div>
+</div>
+</div>
+<div class="bottom-hints" id="bottom-hints">
+  <div class="hints-left">
+    <span class="hint-item">
+      <span class="shoulder-btn">LB</span>
+      <span class="shoulder-btn">RB</span>
+      Switch Tab
+    </span>
+  </div>
+  <div class="hints-right" id="hints-right"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

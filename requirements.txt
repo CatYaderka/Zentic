@@ -1,0 +1,7 @@
+flask
+flask-cors
+requests
+vdf
+psutil
+pywebview
+pyinstaller
