@@ -7,7 +7,6 @@ Zentic is a beautiful, full-screen alternative launcher for your Steam library d
 - **Console Experience**: Fluid animations, native fullscreen Kiosk mode, ambient blurring, and sound hints.
 - **Full Gamepad Support**: Built-in support for Xbox, DualSense (PS5), DualShock 4, and native raw Generic DualShock 3 controllers.
 - **Smart Game Metadata**: Automatically parses your Steam library, pulling hi-res hero banners, capsules, and logos directly from Steam servers.
-- **Media Hub**: Automatically grabs your local pictures from the Windows `Pictures` directory into a sleek, scrollable carousel.
 
 ## Requirements
 
