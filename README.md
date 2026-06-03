@@ -8,12 +8,11 @@ Zentic is a beautiful, full-screen alternative launcher for your Steam library d
 - **Full Gamepad Support**: Built-in support for Xbox, DualSense (PS5), DualShock 4, and native raw Generic DualShock 3 controllers.
 - **Smart Game Metadata**: Automatically parses your Steam library, pulling hi-res hero banners, capsules, and logos directly from Steam servers.
 - **Media Hub**: Automatically grabs your local pictures from the Windows `Pictures` directory into a sleek, scrollable carousel.
-- **"Hide Steam" Mode**: A special setting that hides the main Steam window and annoying popups when launching games, ensuring you only see your game.
 
 ## Requirements
 
 The provided executable `Zentic.exe` is self-contained. 
-If running from source, you need Python 3.10+ and the packages listed in `requirements.txt`.
+If running from source, you need Python 3.11+ and the packages listed in `requirements.txt`.
 
 ## How to Build
 
