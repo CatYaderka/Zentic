@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 :root {
-  --bg:         #111113;
-  --bg2:        #1c1c1f;
+  --bg:         #0a070f;
+  --bg2:        #130f1d;
   --card:       rgba(255, 255, 255, 0.07);
   --cardh:      rgba(255, 255, 255, 0.13);
-  --blue:       #0096FF;
-  --blueg:      rgba(0, 150, 255, 0.35);
+  --blue:       #FF69B4; /* MewStation Neon Pink! */
+  --blueg:      rgba(255, 105, 180, 0.35);
   --t1:         #ffffff;
   --t2:         rgba(255, 255, 255, 0.62);
   --t3:         rgba(255, 255, 255, 0.32);
@@ -52,56 +52,150 @@ img {
   opacity: 0;
   pointer-events: none;
 }
+
+/* ─────────────────────────────────────────
+   MEWSTATION CINEMATIC STARTUP / BOOT
+───────────────────────────────────────── */
 .boot-screen {
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 30%, #0d1f3c, #050b14 55%, #000);
+  background: radial-gradient(circle at 50% 50%, #290d2e 0%, #07030c 60%, #000000 100%) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  overflow: hidden;
+  transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), 
+              transform 0.9s cubic-bezier(0.25, 1, 0.5, 1),
+              filter 0.9s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.boot-screen.out {
+  opacity: 0;
+  transform: scale(1.15);
+  filter: brightness(1.8) blur(15px); /* Cinematic flash reveal! */
+  pointer-events: none;
+}
+.boot-fog {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 105, 180, 0.08) 0%, transparent 70%);
+  animation: bootFogPulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes bootFogPulse {
+  0% { transform: scale(0.9); opacity: 0.4; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+.boot-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 48px;
-  z-index: 1000;
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  position: relative;
+  z-index: 2;
 }
-.boot-screen.out {
-  opacity: 0;
-  transform: scale(1.06);
-  pointer-events: none;
+.boot-ring-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible !important; /* Critical fix! */
 }
-.boot-logo {
-  animation: bootGlow 2.5s ease infinite;
-}
-.ps-logo-svg {
-  width: 260px;
-  filter: drop-shadow(0 0 22px rgba(0, 150, 255, 0.55));
-}
-@keyframes bootGlow {
-  0%, 100% { filter: drop-shadow(0 0 22px rgba(0, 150, 255, 0.55)); }
-  50% { filter: drop-shadow(0 0 46px rgba(0, 150, 255, 0.9)); }
-}
-.boot-progress-wrap {
-  width: 280px;
-}
-.boot-progress {
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.boot-progress-bar {
+.boot-ring-svg {
+  width: 100%;
   height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #0060bb, #00aaff);
-  border-radius: 2px;
-  transition: width 0.4s var(--ease);
-  box-shadow: 0 0 10px #00aaff;
+  transform: rotate(-90deg); /* Rotate so drawing starts from top! */
+  animation: bootRingSpin 10s linear infinite;
+  overflow: visible !important; /* CRITICAL FIX: Stops browser from cropping the glowing drop-shadow into a box/cube! */
 }
-.boot-status {
-  font-size: 12px;
+@keyframes bootRingSpin {
+  100% { transform: rotate(270deg); }
+}
+.boot-ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.015);
+  stroke-width: 2.5px;
+}
+.boot-ring-active {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  overflow: visible !important; /* CRITICAL FIX: Stops browser clipping drop-shadow into a rotated square! */
+  filter: drop-shadow(0 0 10px var(--blue));
+  transition: stroke-dashoffset 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.boot-center-paw {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.paw-logo-svg {
+  width: 100%;
+  height: 100%;
+  fill: #ffffff;
+  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.85)) drop-shadow(0 0 4px #ffffff);
+  animation: bootCenterPulse 3s ease-in-out infinite alternate;
+}
+@keyframes bootCenterPulse {
+  0% { transform: scale(0.95); opacity: 0.85; filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.7)) drop-shadow(0 0 3px #ffffff); }
+  100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 24px rgba(255, 105, 180, 0.95)) drop-shadow(0 0 8px #ffffff); }
+}
+.boot-brand {
+  margin-top: 32px;
+  text-align: center;
+  animation: bootTextAppear 1.5s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+@keyframes bootTextAppear {
+  0% { transform: translateY(15px); opacity: 0; filter: blur(5px); }
+  100% { transform: translateY(0); opacity: 1; filter: blur(0); }
+}
+.brand-text {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: white;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff, #ffb6c1, #ff69b4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255, 105, 180, 0.25);
+}
+.brand-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 5px;
   color: var(--t3);
-  letter-spacing: 0.8px;
+  margin-top: 6px;
+  text-transform: uppercase;
 }
+.boot-tech-info {
+  position: absolute;
+  bottom: -110px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: monospace;
+  font-size: 11px;
+}
+.tech-label {
+  color: var(--t3);
+  letter-spacing: 1px;
+}
+.tech-percent {
+  color: var(--blue);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
+/* ─────────────────────────────────────────
+   CINEMATIC LAUNCH TRANSITION
+───────────────────────────────────────── */
 .launch-overlay {
   position: fixed;
   inset: 0;
@@ -109,10 +203,11 @@ img {
   background: #000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .launch-overlay.show {
   opacity: 1;
@@ -124,20 +219,20 @@ img {
   background-size: cover;
   background-position: center 20%;
   opacity: 0;
-  transform: scale(1.08);
+  transform: scale(1);
 }
 .launch-overlay.show .launch-bg {
-  animation: launchZoom 4.5s ease-out forwards;
+  animation: launchZoomCinematic 3.5s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
 }
-@keyframes launchZoom {
-  0% { transform: scale(1.12); opacity: 0; }
-  10% { opacity: 0.65; }
-  100% { transform: scale(1); opacity: 0.65; }
+@keyframes launchZoomCinematic {
+  0% { transform: scale(1); filter: blur(0px); opacity: 0; }
+  15% { opacity: 0.85; filter: blur(3px); }
+  100% { transform: scale(1.15); filter: blur(18px); opacity: 0.2; }
 }
 .launch-gradient {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.85) 100%);
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 100%);
   opacity: 0;
 }
 .launch-overlay.show .launch-gradient {
@@ -147,6 +242,27 @@ img {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.launch-flare {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.12), rgba(255, 255, 255, 0.85), rgba(255, 105, 180, 0.12), transparent);
+  transform: skewX(-20deg);
+  filter: blur(8px) drop-shadow(0 0 40px var(--blue));
+  opacity: 0;
+  pointer-events: none;
+}
+.launch-overlay.show .launch-flare {
+  animation: flareSweepCinematic 2.2s cubic-bezier(0.25, 1, 0.5, 1) 0.15s forwards;
+}
+@keyframes flareSweepCinematic {
+  0% { left: -150%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 150%; opacity: 0; }
+}
 .launch-content {
   position: relative;
   z-index: 2;
@@ -155,21 +271,21 @@ img {
   align-items: center;
   gap: 40px;
 }
-.launch-logo {
-  max-width: 420px;
-  max-height: 180px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
+.launch-paw-container {
+  width: 120px;
+  height: 120px;
   opacity: 0;
-  transform: translateY(10px);
+  transform: scale(0.9) translateY(20px);
 }
-.launch-overlay.show .launch-logo {
-  animation: logoAppear 2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
+.launch-overlay.show .launch-paw-container {
+  animation: logoAppearCinematic 2.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
 }
-@keyframes logoAppear {
-  0% { opacity: 0; transform: translateY(15px); }
-  100% { opacity: 1; transform: translateY(0); }
+@keyframes logoAppearCinematic {
+  0% { opacity: 0; transform: scale(0.8) translateY(25px); filter: drop-shadow(0 0 0px transparent); }
+  25% { opacity: 1; transform: scale(1.05) translateY(0px); filter: drop-shadow(0 0 25px rgba(255, 105, 180, 0.85)) drop-shadow(0 0 5px #ffffff); }
+  100% { opacity: 1; transform: scale(1) translateY(0px); filter: drop-shadow(0 0 45px rgba(255, 105, 180, 0.55)); }
 }
+
 .ps5-loader {
   width: 42px;
   height: 42px;
@@ -189,12 +305,16 @@ img {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ─────────────────────────────────────────
+   NOTIFICATIONS AND INTERFACES
+───────────────────────────────────────── */
 .notification {
   position: fixed;
   top: 22px;
   right: 22px;
-  background: rgba(26, 26, 30, 0.97);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(18, 14, 25, 0.97);
+  border: 1px solid rgba(255, 105, 180, 0.22);
   border-radius: 14px;
   padding: 13px 18px;
   display: flex;
@@ -202,7 +322,7 @@ img {
   gap: 13px;
   z-index: 800;
   backdrop-filter: blur(24px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.65);
   transform: translateX(calc(100% + 28px));
   transition: transform 0.45s var(--ease);
   min-width: 270px;
@@ -261,24 +381,6 @@ img {
   align-items: center;
   gap: 8px;
   position: relative;
-}
-.nav-tab::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 3px;
-  background: white;
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-.nav-tab.active {
-  color: white;
-}
-.nav-tab.active::after {
-  width: 50%;
 }
 .nav-tab:hover:not(.active) {
   color: white;
@@ -343,7 +445,7 @@ img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a4a8a, #0096ff);
+  background: linear-gradient(135deg, #4b1a4a, #ff69b4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -460,7 +562,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e3a5f, #0a1520);
+  background: linear-gradient(135deg, #3a1e3f, #150a20);
   font-size: 28px;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.5);
@@ -483,9 +585,9 @@ img {
 .hero-gradient {
   position: fixed;
   inset: 0;
-  background: linear-gradient(to right, rgba(8, 8, 12, 0.9) 0%, rgba(8, 8, 12, 0.38) 52%, transparent 100%),
-              linear-gradient(to top, rgba(8, 8, 12, 0.98) 0%, transparent 48%),
-              linear-gradient(to bottom, rgba(8, 8, 12, 0.45) 0%, transparent 28%);
+  background: linear-gradient(to right, rgba(10, 7, 15, 0.92) 0%, rgba(10, 7, 15, 0.38) 52%, transparent 100%),
+              linear-gradient(to top, rgba(10, 7, 15, 0.98) 0%, transparent 48%),
+              linear-gradient(to bottom, rgba(10, 7, 15, 0.45) 0%, transparent 28%);
   z-index: 1;
   pointer-events: none;
 }
@@ -495,7 +597,7 @@ img {
   height: 100%;
   display: flex;
   align-items: flex-end;
-  padding: 28px 44px 32px;
+  padding: 28px 44px 76px;
 }
 .hero-left {
   display: flex;
@@ -626,9 +728,9 @@ img {
   right: 0;
   bottom: 0;
   height: 54vh;
-  background: rgba(9, 9, 13, 0.97);
+  background: rgba(10, 8, 15, 0.97);
   backdrop-filter: blur(32px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 105, 180, 0.15);
   border-radius: 22px 22px 0 0;
   box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.75);
   z-index: 29;
@@ -651,7 +753,7 @@ img {
 .library-handle-bar {
   width: 38px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 105, 180, 0.3);
   border-radius: 2px;
 }
 .library-header {
@@ -721,7 +823,7 @@ img {
   position: absolute;
   inset: -50%;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, transparent 100deg, rgba(255,255,255,0.8) 160deg, white 180deg, transparent 180deg, transparent 280deg, rgba(255,255,255,0.8) 340deg, white 360deg);
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 100deg, rgba(255,105,180,0.8) 160deg, #ff69b4 180deg, transparent 180deg, transparent 280deg, rgba(255,105,180,0.8) 340deg, #ff69b4 360deg);
   animation: runnerSpin 1.1s linear infinite;
   opacity: 0;
   pointer-events: none;
@@ -749,7 +851,7 @@ img {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(145deg, #1a2a44, #0c1520);
+  background: linear-gradient(145deg, #3a1c3e, #150a20);
   padding: 14px;
 }
 .lib-card-fallback .fl {
@@ -807,7 +909,7 @@ img {
 .search-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(7, 7, 11, 0.94);
+  background: rgba(10, 8, 15, 0.94);
   backdrop-filter: blur(30px);
   z-index: 850;
   display: flex;
@@ -927,7 +1029,7 @@ img {
   position: absolute;
   inset: -50%;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, transparent 100deg, rgba(255,255,255,0.8) 160deg, white 180deg, transparent 180deg, transparent 280deg, rgba(255,255,255,0.8) 340deg, white 360deg);
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 100deg, rgba(255,105,180,0.8) 160deg, #ff69b4 180deg, transparent 180deg, transparent 280deg, rgba(255,105,180,0.8) 340deg, #ff69b4 360deg);
   animation: runnerSpin 1.1s linear infinite;
   opacity: 0;
   pointer-events: none;
@@ -975,7 +1077,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #1a2a44, #0c1520);
+  background: linear-gradient(145deg, #3a1c3e, #150a20);
   font-size: 28px;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.5);
@@ -1056,8 +1158,8 @@ img {
 .detail-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(8, 8, 12, 0.96) 0%, rgba(8, 8, 12, 0.7) 55%, rgba(8, 8, 12, 0.35) 100%),
-              linear-gradient(to top, rgba(8, 8, 12, 0.99) 0%, transparent 55%);
+  background: linear-gradient(to right, rgba(10, 7, 15, 0.96) 0%, rgba(10, 7, 15, 0.7) 55%, rgba(10, 7, 15, 0.35) 100%),
+              linear-gradient(to top, rgba(10, 7, 15, 0.99) 0%, transparent 55%);
 }
 .detail-close {
   position: absolute;
@@ -1134,9 +1236,9 @@ img {
   top: 0;
   bottom: 0;
   width: 380px;
-  background: rgba(14, 14, 18, 0.96);
+  background: rgba(14, 11, 20, 0.96);
   backdrop-filter: blur(40px);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid rgba(255, 105, 180, 0.15);
   z-index: 900;
   display: flex;
   flex-direction: column;
@@ -1232,7 +1334,7 @@ img {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a4a8a, #0096ff);
+  background: linear-gradient(135deg, #4b1a4a, #ff69b4);
   border: 4px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 24px;
   overflow: hidden;
@@ -1263,7 +1365,7 @@ img {
 .media-hero {
   flex: 1;
   min-height: 0;
-  background: linear-gradient(135deg, #0a1628, #1a0a28);
+  background: linear-gradient(135deg, #2b0c30, #0c051a);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1303,7 +1405,7 @@ img {
 }
 .media-app-card:hover, .media-app-card.ui-focused {
   background: var(--cardh);
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 105, 180, 0.24);
   transform: translateY(-4px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
 }
@@ -1415,4 +1517,159 @@ img {
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.14);
   border-radius: 3px;
+}
+
+/* ─────────────────────────────────────────
+   ZEN GRAPHICS & TRANSITIONS OVERRIDES
+───────────────────────────────────────── */
+
+/* Scale and lift effects for interactive cards */
+.game-icon-item {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+.game-icon-item:hover,
+.game-icon-item.ui-focused {
+  transform: scale(1.12);
+}
+
+.lib-card {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lib-card:hover,
+.lib-card.ui-focused {
+  transform: scale(1.12);
+}
+
+.media-app-card {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.media-app-card:hover,
+.media-app-card.ui-focused {
+  transform: translateY(-4px) scale(1.06);
+}
+
+/* Beautiful focused glows */
+.game-icon-item.ui-focused .game-icon-inner,
+.lib-card.ui-focused .lib-card-inner,
+.search-result-item.ui-focused {
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.5), inset 0 0 0 1.5px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Game running state pulse glow */
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--triangle);
+  display: inline-block;
+  margin-right: 8px;
+  box-shadow: 0 0 8px var(--triangle);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+  vertical-align: middle;
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.btn-play.game-running {
+  background: rgba(62, 214, 162, 0.15) !important;
+  border: 1.5px solid var(--triangle) !important;
+}
+.btn-play.game-running .btn-play-mask {
+  background: transparent !important;
+}
+.btn-play.game-running .btn-play-content {
+  color: var(--triangle) !important;
+}
+
+#detail-play.game-running {
+  background: rgba(62, 214, 162, 0.15) !important;
+  border: 1.5px solid var(--triangle) !important;
+}
+#detail-play.game-running .btn-play-mask {
+  background: transparent !important;
+}
+#detail-play.game-running .btn-play-content {
+  color: var(--triangle) !important;
+}
+
+/* ─────────────────────────────────────────
+   HIGH-FIDELITY PS5 INTERFACE STYLING
+───────────────────────────────────────── */
+
+/* 1. Fully white / Monochrome emojis filter */
+.monochrome-icon {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.9;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* 2. Premium PS5 animated fluid mesh background */
+@keyframes ps5Mesh {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.app {
+  background: radial-gradient(circle at 50% 30%, #290d2e 0%, #08040d 60%, #000000 100%) !important;
+  background-size: 200% 200% !important;
+  animation: ps5Mesh 20s ease infinite !important;
+}
+
+/* 3. PS5 Menu Tabs Active Indicator (Rounded Dot instead of a Line) */
+.nav-tab::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 0 !important;
+  height: 4px !important;
+  background: white !important;
+  border-radius: 50% !important; /* Make it a circular dot! */
+  transition: width 0.28s ease, height 0.28s ease !important;
+}
+
+.nav-tab.active::after {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+/* Ensure no overlap in hints and buttons */
+.bottom-hints {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%) !important;
+  padding: 0 34px !important;
+}
+
+/* Media Development Placeholder */
+.development-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  color: white;
+  animation: fadeIn 0.4s ease;
+}
+.dev-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  opacity: 0.85;
+}
+.dev-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+.dev-subtitle {
+  font-size: 13px;
+  color: var(--t3);
+  font-weight: 700;
+  letter-spacing: 2px;
 }

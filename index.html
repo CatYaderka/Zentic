@@ -3,36 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zentic</title>
+<title>MewStation</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="boot-screen" class="boot-screen">
-  <div class="boot-logo">
-    <svg viewBox="0 0 260 60" class="ps-logo-svg">
-      <text x="10" y="50" font-family="Arial Black" font-size="56" fill="white" font-weight="900">Z</text>
-      <rect x="55" y="18" width="2" height="30" fill="rgba(255,255,255,0.3)"/>
-      <text x="65" y="38" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.8)" font-weight="300" letter-spacing="4">ZENTIC</text>
-      <text x="65" y="52" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.4)" font-weight="300" letter-spacing="3">SYSTEM</text>
-    </svg>
-  </div>
-  <div class="boot-progress-wrap">
-    <div class="boot-progress">
-      <div class="boot-progress-bar" id="boot-bar"></div>
+  <div class="boot-fog"></div>
+  <div class="boot-container">
+    <div class="boot-ring-container">
+      <svg class="boot-ring-svg" viewBox="0 0 100 100">
+        <circle class="boot-ring-bg" cx="50" cy="50" r="45"></circle>
+        <circle class="boot-ring-active" id="boot-ring-active" cx="50" cy="50" r="45" style="stroke-dasharray: 283; stroke-dashoffset: 283;"></circle>
+      </svg>
+      <div class="boot-center-paw">
+        <svg viewBox="0 0 100 100" class="paw-logo-svg">
+          <path d="M 50,45 C 35,45 28,60 30,72 C 32,82 42,85 50,85 C 58,85 68,82 70,72 C 72,60 65,45 50,45 Z" />
+          <circle cx="25" cy="35" r="10" />
+          <circle cx="42" cy="22" r="11" />
+          <circle cx="58" cy="22" r="11" />
+          <circle cx="75" cy="35" r="10" />
+        </svg>
+      </div>
+    </div>
+    
+    <div class="boot-brand">
+      <div class="brand-text">MewStation</div>
+      <div class="brand-sub">SYSTEM OPERATIONAL</div>
+    </div>
+    
+    <div class="boot-tech-info">
+      <span class="tech-label" id="boot-status">INITIALIZING SYSTEM_</span>
+      <span class="tech-percent" id="boot-percent">00%</span>
     </div>
   </div>
-  <div class="boot-status" id="boot-status">Initializing...</div>
 </div>
+
 <div id="launch-overlay" class="launch-overlay">
   <div class="launch-bg" id="launch-bg"></div>
   <div class="launch-gradient"></div>
+  <div class="launch-flare" id="launch-flare"></div>
   <div class="launch-content">
+    <div class="launch-paw-container">
+      <svg viewBox="0 0 100 100" class="paw-logo-svg launch-paw-logo">
+        <path d="M 50,45 C 35,45 28,60 30,72 C 32,82 42,85 50,85 C 58,85 68,82 70,72 C 72,60 65,45 50,45 Z" />
+        <circle cx="25" cy="35" r="10" />
+        <circle cx="42" cy="22" r="11" />
+        <circle cx="58" cy="22" r="11" />
+        <circle cx="75" cy="35" r="10" />
+      </svg>
+    </div>
+    <!-- Restored launch logo image for game-specific artwork display -->
     <img class="launch-logo" id="launch-logo" src="" alt="">
     <div class="ps5-loader"></div>
   </div>
 </div>
 <div id="notification" class="notification hidden">
-  <div class="notification-icon" id="notif-icon">🎮</div>
+  <div class="notification-icon monochrome-icon" id="notif-icon">🎮</div>
   <div class="notification-body">
     <div class="notification-title" id="notification-title"></div>
     <div class="notification-text"  id="notification-text"></div>
@@ -52,6 +78,22 @@
     <button class="lib-arrow" id="lib-arrow-right">&#8250;</button>
   </div>
 </div>
+
+<div class="search-overlay hidden" id="calibration-overlay" style="background: rgba(8, 8, 12, 0.98); z-index: 950;">
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; height: 100vh;">
+    <div class="monochrome-icon" style="font-size: 56px; margin-bottom: 24px;">🎮</div>
+    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px;">Controller Calibration</h1>
+    <p style="font-size: 15px; color: var(--t2); margin-bottom: 40px; max-width: 480px; line-height: 1.5;">Let's customize your button mapping. Press the requested button on your connected controller.</p>
+    
+    <div id="calibration-prompt-box" style="background: rgba(255,255,255,0.04); padding: 36px 60px; border-radius: 20px; border: 1px solid var(--border); min-width: 380px; margin-bottom: 34px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+      <div id="calibration-btn-name" style="font-size: 26px; font-weight: 800; color: var(--blue); margin-bottom: 12px; min-height: 38px;">...</div>
+      <div id="calibration-step-text" style="font-size: 13px; color: var(--t3); text-transform: uppercase; letter-spacing: 1px;">Step 1 of 6</div>
+    </div>
+    
+    <button class="btn-secondary" id="btn-cancel-calibration">Cancel Calibration</button>
+  </div>
+</div>
+
 <div id="app" class="app invisible">
   <header class="topbar">
     <nav class="topbar-nav">
@@ -129,27 +171,10 @@
     </div>
   </div>
   <div class="tab-content" id="tab-content-media">
-    <div class="media-view">
-      <div class="media-hero">
-        <div class="media-hero-text">
-          <h1>Media</h1>
-          <p>Your entertainment hub</p>
-        </div>
-      </div>
-      <div class="media-apps">
-        <div class="media-app-card" data-midx="0">
-          <div class="media-app-icon">📺</div><span>YouTube</span>
-        </div>
-        <div class="media-app-card" data-midx="1">
-          <div class="media-app-icon">🎵</div><span>Spotify</span>
-        </div>
-        <div class="media-app-card" data-midx="2">
-          <div class="media-app-icon">🎬</div><span>Netflix</span>
-        </div>
-        <div class="media-app-card" data-midx="3">
-          <div class="media-app-icon">🎭</div><span>Twitch</span>
-        </div>
-      </div>
+    <div class="development-placeholder">
+      <div class="dev-icon monochrome-icon">🛠</div>
+      <div class="dev-title">В разработке</div>
+      <div class="dev-subtitle">МЕДИА-ЦЕНТР СКОРО БУДЕТ ДОСТУПЕН</div>
     </div>
   </div>
   <div class="search-overlay hidden" id="search-overlay">
@@ -266,6 +291,10 @@
     </button>
   </div>
   <div class="side-group">
+    <div class="side-item" id="setting-sound-effects">
+      <span class="side-label">Sound Effects</span>
+      <div class="toggle-switch" id="toggle-sound-effects"></div>
+    </div>
     <div class="side-item" id="setting-hide-steam">
       <span class="side-label">Hide Steam Windows</span>
       <div class="toggle-switch" id="toggle-hide-steam"></div>
@@ -273,6 +302,18 @@
     <div class="side-item" id="setting-ds3-fix">
       <span class="side-label">Gamepad Layout</span>
       <span class="side-value" id="ds3-fix-label" style="font-size:12px; font-weight:700; color:var(--blue);">Standard</span>
+    </div>
+    <div class="side-item" id="setting-calibrate">
+      <span class="side-label" style="color: var(--blue);">Calibrate Controller</span>
+      <span class="monochrome-icon" style="font-size: 14px;">⚙</span>
+    </div>
+    <div class="side-item" id="setting-sort-mode">
+      <span class="side-label">Library Sorting</span>
+      <span class="side-value" id="sort-mode-label" style="font-size:12px; font-weight:700; color:var(--blue);">Last Played</span>
+    </div>
+    <div class="side-item" id="setting-quit" style="border-color: rgba(220, 80, 80, 0.2); background: rgba(220, 80, 80, 0.05);">
+      <span class="side-label" style="color: #ff6b6b;">Exit MewStation</span>
+      <span class="monochrome-icon" style="font-size: 16px;">🚪</span>
     </div>
   </div>
 </div>
@@ -305,6 +346,7 @@
   </div>
   <div class="hints-right" id="hints-right"></div>
 </div>
+
 <script src="app.js"></script>
 </body>
 </html>
